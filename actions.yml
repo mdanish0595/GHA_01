@@ -1,0 +1,27 @@
+name: first_github_actions_code
+on: 
+    push_request:
+        branches:
+            - main
+#Above code defines when workflow will run. It will trigger when git 'push' happens on main branch. 
+env:    
+    NODE_VERSION: 18
+    Secret_01_value: ${{MY_SECRETS}}
+#Above code Setting the global var, can be overwritten is specfied locally.
+#Below job is like pipeline, we can have multiple jobs within a workflow.
+jobs:
+    My_build:
+        runs-on:  ubuntu-latest 
+        #Runner(agent) OS image. Runner is like jenkins-agent.
+        steps:
+            - name: step1
+              uses: actions/checkout@v3   
+            - name: step2
+              uses: actions/setup-node@v3 
+              with:
+                node-version: 17 #Other def '${{env.NODE_VERSION:}}', to pull value from global var.
+            #Steps are like stages in Jenkins. First action is checking out the repo.
+            #checkout@v3 is the github action 'plugging' version for git actions(not repo version).
+            #setup-node@v3  is the github action 'plugging' version for nodejs.
+            
+        
