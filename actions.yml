@@ -24,4 +24,24 @@ jobs:
             #checkout@v3 is the github action 'plugging' version for git actions(not repo version).
             #setup-node@v3  is the github action 'plugging' version for nodejs.
             
-        
+Name: <name of the workflow> [Optional]
+On: 
+	Event_01:
+		Branches:
+		   -  <branch_name>
+	Event_02:
+		Branches:
+		   -  <branch_name>
+Jobs:
+    build:
+
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: XYZ
+          uses:
+
+        - name: PQR
+          run:   
