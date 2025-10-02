@@ -1,47 +1,39 @@
-name: first_github_actions_code
-on: 
-    push_request:
-        branches:
-            - main
-#Above code defines when workflow will run. It will trigger when git 'push' happens on main branch. 
-env:    
-    NODE_VERSION: 18
-    Secret_01_value: ${{MY_SECRETS}}
-#Above code Setting the global var, can be overwritten is specfied locally.
-#Below job is like pipeline, we can have multiple jobs within a workflow.
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+# permissions:
+#   id-token: write
+#   contents: read
+
 jobs:
-    My_build:
-        runs-on:  ubuntu-latest 
-        #Runner(agent) OS image. Runner is like jenkins-agent.
-        steps:
-            - name: step1
-              uses: actions/checkout@v3   
-            - name: step2
-              uses: actions/setup-node@v3 
-              with:
-                node-version: 17 #Other def '${{env.NODE_VERSION:}}', to pull value from global var.
-            #Steps are like stages in Jenkins. First action is checking out the repo.
-            #checkout@v3 is the github action 'plugging' version for git actions(not repo version).
-            #setup-node@v3  is the github action 'plugging' version for nodejs.
-            
-Name: <name of the workflow> [Optional]
-On: 
-	Event_01:
-		Branches:
-		   -  <branch_name>
-	Event_02:
-		Branches:
-		   -  <branch_name>
-Jobs:
-    build:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-west-2
+      TF_WORKING_DIR: ./terraform-sg
 
-        runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        steps:
-        - uses: actions/checkout@v2
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::211125325120:role/test-github-integration-role
+          aws-region: ${{ env.AWS_REGION }}
 
-        - name: XYZ
-          uses:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-        - name: PQR
-          run:   
+      - name: Terraform Init
+        run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
+
+      - name: Terraform Plan
+        run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
+
+      # - name: Terraform Apply
+      #   run: terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve
