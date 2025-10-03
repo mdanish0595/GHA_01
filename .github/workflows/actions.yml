@@ -1,4 +1,4 @@
-name: Terraform Deploy2
+name: Terraform Deployment with Github
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
+  Deploy_SG:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-west-2
@@ -30,10 +30,16 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
+        run terraform init
+        # run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
 
       - name: Terraform Plan
-        run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
+        run terrform plan
+      # run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
+
+
+      - name: Terraform Apply
+        run terraform apply
 
       # - name: Terraform Apply
       #   run: terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve
