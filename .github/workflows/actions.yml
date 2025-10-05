@@ -32,13 +32,23 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
       - name: Terraform Init
         run: terraform init
         # run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         run: terraform plan
         # run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
 
-      # - name: Terraform Apply
+      - name: Terraform Apply
+        run: terraform plan
       #   run: terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve
