@@ -12,10 +12,13 @@ permissions:
 jobs:
   Deploy_SG:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
     env:
       AWS_REGION: us-west-2
       TF_WORKING_DIR: ./terraform-sg
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,12 +33,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        # run: terraform init
-        run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
+        run: terraform init
+        # run: terraform -chdir=${{ env.TF_WORKING_DIR }} init
 
       - name: Terraform Plan
-        # run: terraform plan
-        run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
+        run: terraform plan
+        # run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan
 
-      - name: Terraform Apply
-        run: terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve
+      # - name: Terraform Apply
+      #   run: terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve
