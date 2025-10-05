@@ -1,4 +1,4 @@
-name: Terraform Deployment with Github
+name: Lab_02_GHW02_Terraform Deployment with Github
 
 on:
   push:
