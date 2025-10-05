@@ -1,1 +1,1 @@
-# Lab_01_GHA_Basic
+# GHA_Lab_01_Basic
